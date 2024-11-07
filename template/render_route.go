@@ -24,23 +24,34 @@ func (t *Template) renderRoute(metadata M.Metadata, options *option.Options) err
 		{
 			Type: C.RuleTypeLogical,
 			LogicalOptions: option.LogicalRule{
-				Mode: C.LogicalTypeOr,
-				Rules: []option.Rule{
-					{
-						Type: C.RuleTypeDefault,
-						DefaultOptions: option.DefaultRule{
-							Network: []string{N.NetworkUDP},
-							Port:    []uint16{53},
+				RawLogicalRule: option.RawLogicalRule{
+					Mode: C.LogicalTypeOr,
+					Rules: []option.Rule{
+						{
+							Type: C.RuleTypeDefault,
+							DefaultOptions: option.DefaultRule{
+								RawDefaultRule: option.RawDefaultRule{
+									Network: []string{N.NetworkUDP},
+									Port:    []uint16{53},
+								},
+							},
 						},
-					},
-					{
-						Type: C.RuleTypeDefault,
-						DefaultOptions: option.DefaultRule{
-							Protocol: []string{C.ProtocolDNS},
+						{
+							Type: C.RuleTypeDefault,
+							DefaultOptions: option.DefaultRule{
+								RawDefaultRule: option.RawDefaultRule{
+									Protocol: []string{C.ProtocolDNS},
+								},
+							},
 						},
 					},
 				},
-				Outbound: DNSTag,
+				RuleAction: option.RuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.RouteActionOptions{
+						Outbound: DNSTag,
+					},
+				},
 			},
 		},
 	}
@@ -56,16 +67,30 @@ func (t *Template) renderRoute(metadata M.Metadata, options *option.Options) err
 		options.Route.Rules = append(options.Route.Rules, option.Rule{
 			Type: C.RuleTypeDefault,
 			DefaultOptions: option.DefaultRule{
-				GeoIP:    []string{"private"},
-				Outbound: directTag,
+				RawDefaultRule: option.RawDefaultRule{
+					GeoIP: []string{"private"},
+				},
+				RuleAction: option.RuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.RouteActionOptions{
+						Outbound: directTag,
+					},
+				},
 			},
 		})
 	} else {
 		options.Route.Rules = append(options.Route.Rules, option.Rule{
 			Type: C.RuleTypeDefault,
 			DefaultOptions: option.DefaultRule{
-				IPIsPrivate: true,
-				Outbound:    directTag,
+				RawDefaultRule: option.RawDefaultRule{
+					IPIsPrivate: true,
+				},
+				RuleAction: option.RuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.RouteActionOptions{
+						Outbound: directTag,
+					},
+				},
 			},
 		})
 	}
@@ -81,14 +106,28 @@ func (t *Template) renderRoute(metadata M.Metadata, options *option.Options) err
 		options.Route.Rules = append(options.Route.Rules, option.Rule{
 			Type: C.RuleTypeDefault,
 			DefaultOptions: option.DefaultRule{
-				ClashMode: modeGlobal,
-				Outbound:  defaultTag,
+				RawDefaultRule: option.RawDefaultRule{
+					ClashMode: modeGlobal,
+				},
+				RuleAction: option.RuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.RouteActionOptions{
+						Outbound: defaultTag,
+					},
+				},
 			},
 		}, option.Rule{
 			Type: C.RuleTypeDefault,
 			DefaultOptions: option.DefaultRule{
-				ClashMode: modeDirect,
-				Outbound:  directTag,
+				RawDefaultRule: option.RawDefaultRule{
+					ClashMode: modeDirect,
+				},
+				RuleAction: option.RuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.RouteActionOptions{
+						Outbound: directTag,
+					},
+				},
 			},
 		})
 	}
@@ -99,17 +138,31 @@ func (t *Template) renderRoute(metadata M.Metadata, options *option.Options) err
 				options.Route.Rules = append(options.Route.Rules, option.Rule{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultRule{
-						GeoIP:    []string{"cn"},
-						Geosite:  []string{"geolocation-cn"},
-						Outbound: directTag,
+						RawDefaultRule: option.RawDefaultRule{
+							GeoIP:   []string{"cn"},
+							Geosite: []string{"geolocation-cn"},
+						},
+						RuleAction: option.RuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.RouteActionOptions{
+								Outbound: directTag,
+							},
+						},
 					},
 				})
 			} else {
 				options.Route.Rules = append(options.Route.Rules, option.Rule{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultRule{
-						RuleSet:  []string{"geoip-cn", "geosite-geolocation-cn"},
-						Outbound: directTag,
+						RawDefaultRule: option.RawDefaultRule{
+							RuleSet: []string{"geoip-cn", "geosite-geolocation-cn"},
+						},
+						RuleAction: option.RuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.RouteActionOptions{
+								Outbound: directTag,
+							},
+						},
 					},
 				})
 			}
@@ -125,17 +178,26 @@ func (t *Template) renderRoute(metadata M.Metadata, options *option.Options) err
 		options.Route.Rules = append(options.Route.Rules, option.Rule{
 			Type: C.RuleTypeLogical,
 			LogicalOptions: option.LogicalRule{
-				Mode: C.LogicalTypeOr,
-				Rules: []option.Rule{
-					{
-						Type: C.RuleTypeDefault,
-						DefaultOptions: option.DefaultRule{
-							Network: []string{N.NetworkUDP},
-							Port:    []uint16{443},
+				RawLogicalRule: option.RawLogicalRule{
+					Mode: C.LogicalTypeOr,
+					Rules: []option.Rule{
+						{
+							Type: C.RuleTypeDefault,
+							DefaultOptions: option.DefaultRule{
+								RawDefaultRule: option.RawDefaultRule{
+									Network: []string{N.NetworkUDP},
+									Port:    []uint16{443},
+								},
+							},
 						},
 					},
 				},
-				Outbound: blockTag,
+				RuleAction: option.RuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.RouteActionOptions{
+						Outbound: blockTag,
+					},
+				},
 			},
 		})
 	}

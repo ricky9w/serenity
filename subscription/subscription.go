@@ -187,7 +187,7 @@ func (m *Manager) update(subscription *Subscription) error {
 		response.Body.Close()
 		return err
 	}
-	rawServers, err := parser.ParseSubscription(string(content))
+	rawServers, err := parser.ParseSubscription(m.ctx, string(content))
 	if err != nil {
 		response.Body.Close()
 		return err

@@ -1,11 +1,13 @@
 package option
 
 import (
+	"context"
 	"time"
 
 	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing/common/json"
 	"github.com/sagernet/sing/common/json/badjson"
+	"github.com/sagernet/sing/common/json/badoption"
 )
 
 type _Options struct {
@@ -15,17 +17,17 @@ type _Options struct {
 	TLS        *option.InboundTLSOptions `json:"tls,omitempty"`
 	CacheFile  string                    `json:"cache_file,omitempty"`
 
-	Outbounds     []option.Listable[option.Outbound] `json:"outbounds,omitempty"`
-	Subscriptions []Subscription                     `json:"subscriptions,omitempty"`
-	Templates     []Template                         `json:"templates,omitempty"`
-	Profiles      []Profile                          `json:"profiles,omitempty"`
-	Users         []User                             `json:"users,omitempty"`
+	Outbounds     []badoption.Listable[option.Outbound] `json:"outbounds,omitempty"`
+	Subscriptions []Subscription                        `json:"subscriptions,omitempty"`
+	Templates     []Template                            `json:"templates,omitempty"`
+	Profiles      []Profile                             `json:"profiles,omitempty"`
+	Users         []User                                `json:"users,omitempty"`
 }
 
 type Options _Options
 
-func (o *Options) UnmarshalJSON(content []byte) error {
-	err := json.UnmarshalDisallowUnknownFields(content, (*_Options)(o))
+func (o *Options) UnmarshalJSONContext(ctx context.Context, content []byte) error {
+	err := json.UnmarshalContextDisallowUnknownFields(ctx, content, (*_Options)(o))
 	if err != nil {
 		return err
 	}

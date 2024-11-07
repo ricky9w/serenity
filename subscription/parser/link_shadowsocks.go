@@ -43,7 +43,7 @@ func ParseShadowsocksLink(link string) (option.Outbound, error) {
 	var outbound option.Outbound
 	outbound.Type = C.TypeShadowsocks
 	outbound.Tag = linkURL.Fragment
-	outbound.ShadowsocksOptions = options
+	outbound.Options = &options
 	return outbound, nil
 }
 

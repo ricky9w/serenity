@@ -1,11 +1,14 @@
 package option
 
 import (
+	"context"
+
 	C "github.com/sagernet/serenity/constant"
 	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing-dns"
 	E "github.com/sagernet/sing/common/exceptions"
 	"github.com/sagernet/sing/common/json"
+	"github.com/sagernet/sing/common/json/badjson"
 )
 
 type _Template struct {
@@ -81,8 +84,8 @@ func (t *Template) MarshalJSON() ([]byte, error) {
 	return json.Marshal((*_Template)(t))
 }
 
-func (t *Template) UnmarshalJSON(content []byte) error {
-	err := json.UnmarshalDisallowUnknownFields(content, (*_Template)(t))
+func (t *Template) UnmarshalJSONContext(ctx context.Context, content []byte) error {
+	err := json.UnmarshalContextDisallowUnknownFields(ctx, content, (*_Template)(t))
 	if err != nil {
 		return err
 	}
@@ -100,7 +103,7 @@ type RuleSet _RuleSet
 
 func (r *RuleSet) MarshalJSON() ([]byte, error) {
 	if r.Type == C.RuleSetTypeGitHub {
-		return option.MarshallObjects((*_RuleSet)(r), r.GitHubOptions)
+		return badjson.MarshallObjects((*_RuleSet)(r), r.GitHubOptions)
 	} else {
 		return json.Marshal(r.DefaultOptions)
 	}
@@ -112,9 +115,9 @@ func (r *RuleSet) UnmarshalJSON(content []byte) error {
 		return err
 	}
 	if r.Type == C.RuleSetTypeGitHub {
-		return option.UnmarshallExcluded(content, (*_RuleSet)(r), &r.GitHubOptions)
+		return badjson.UnmarshallExcluded(content, (*_RuleSet)(r), &r.GitHubOptions)
 	} else {
-		return option.UnmarshallExcluded(content, (*_RuleSet)(r), &r.DefaultOptions)
+		return badjson.UnmarshallExcluded(content, (*_RuleSet)(r), &r.DefaultOptions)
 	}
 }
 

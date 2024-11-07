@@ -141,11 +141,11 @@ func (p *Profile) Render(metadata metadata.Metadata) (*boxOption.Options, error)
 	subscriptions := common.Filter(p.manager.subscription.Subscriptions(), func(it *subscription.Subscription) bool {
 		return common.Contains(p.Subscription, it.Name)
 	})
-	options, err := selectedTemplate.Render(metadata, p.Name, outbounds, subscriptions)
+	options, err := selectedTemplate.Render(p.manager.ctx, metadata, p.Name, outbounds, subscriptions)
 	if err != nil {
 		return nil, err
 	}
-	options, err = badjson.Omitempty(options)
+	options, err = badjson.Omitempty(p.manager.ctx, options)
 	if err != nil {
 		return nil, E.Cause(err, "omitempty")
 	}

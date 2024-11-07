@@ -71,7 +71,7 @@ func export(profileName string) error {
 		}
 		options.Log.DisableColor = true
 	}
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(globalCtx)
 	instance, err := server.New(ctx, options)
 	if err != nil {
 		cancel()

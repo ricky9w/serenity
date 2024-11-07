@@ -31,22 +31,24 @@ func (t *Template) renderOutbounds(metadata M.Metadata, options *boxOption.Optio
 	}
 	options.Outbounds = []boxOption.Outbound{
 		{
-			Tag:           directTag,
-			Type:          C.TypeDirect,
-			DirectOptions: common.PtrValueOrDefault(t.CustomDirect),
+			Tag:     directTag,
+			Type:    C.TypeDirect,
+			Options: common.Ptr(common.PtrValueOrDefault(t.CustomDirect)),
 		},
 		{
-			Tag:  blockTag,
-			Type: C.TypeBlock,
+			Tag:     blockTag,
+			Type:    C.TypeBlock,
+			Options: &boxOption.StubOptions{},
 		},
 		{
-			Tag:  DNSTag,
-			Type: C.TypeDNS,
+			Tag:     DNSTag,
+			Type:    C.TypeDNS,
+			Options: &boxOption.StubOptions{},
 		},
 		{
-			Tag:             defaultTag,
-			Type:            C.TypeSelector,
-			SelectorOptions: common.PtrValueOrDefault(t.CustomSelector),
+			Tag:     defaultTag,
+			Type:    C.TypeSelector,
+			Options: common.Ptr(common.PtrValueOrDefault(t.CustomSelector)),
 		},
 	}
 	urlTestTag := t.URLTestTag
@@ -80,12 +82,13 @@ func (t *Template) renderOutbounds(metadata M.Metadata, options *boxOption.Optio
 			return it.Tag
 		})
 		if it.GenerateSelector {
+			selectorOptions := common.PtrValueOrDefault(it.CustomSelector)
 			selectorOutbound := boxOption.Outbound{
-				Type:            C.TypeSelector,
-				Tag:             it.Name,
-				SelectorOptions: common.PtrValueOrDefault(it.CustomSelector),
+				Type:    C.TypeSelector,
+				Tag:     it.Name,
+				Options: &selectorOptions,
 			}
-			selectorOutbound.SelectorOptions.Outbounds = append(selectorOutbound.SelectorOptions.Outbounds, joinOutbounds...)
+			selectorOptions.Outbounds = append(selectorOptions.Outbounds, joinOutbounds...)
 			allGroups = append(allGroups, selectorOutbound)
 			groupTags = append(groupTags, selectorOutbound.Tag)
 		}
@@ -98,12 +101,13 @@ func (t *Template) renderOutbounds(metadata M.Metadata, options *boxOption.Optio
 			} else {
 				urltestTag = it.Name + " - URLTest"
 			}
+			urltestOptions := common.PtrValueOrDefault(t.CustomURLTest)
 			urltestOutbound := boxOption.Outbound{
-				Type:           C.TypeURLTest,
-				Tag:            urltestTag,
-				URLTestOptions: common.PtrValueOrDefault(t.CustomURLTest),
+				Type:    C.TypeURLTest,
+				Tag:     urltestTag,
+				Options: &urltestOptions,
 			}
-			urltestOutbound.URLTestOptions.Outbounds = append(urltestOutbound.URLTestOptions.Outbounds, joinOutbounds...)
+			urltestOptions.Outbounds = append(urltestOptions.Outbounds, joinOutbounds...)
 			allGroups = append(allGroups, urltestOutbound)
 			groupTags = append(groupTags, urltestOutbound.Tag)
 		}
@@ -144,16 +148,18 @@ func (t *Template) renderOutbounds(metadata M.Metadata, options *boxOption.Optio
 				continue
 			}
 			groupOutbound := boxOption.Outbound{
-				Tag:             extraGroup.Tag,
-				Type:            extraGroup.Type,
-				SelectorOptions: common.PtrValueOrDefault(extraGroup.CustomSelector),
-				URLTestOptions:  common.PtrValueOrDefault(extraGroup.CustomURLTest),
+				Tag:  extraGroup.Tag,
+				Type: extraGroup.Type,
 			}
 			switch extraGroup.Type {
 			case C.TypeSelector:
-				groupOutbound.SelectorOptions.Outbounds = append(groupOutbound.SelectorOptions.Outbounds, extraTags...)
+				selectorOptions := common.PtrValueOrDefault(extraGroup.CustomSelector)
+				groupOutbound.Options = &selectorOptions
+				selectorOptions.Outbounds = append(selectorOptions.Outbounds, extraTags...)
 			case C.TypeURLTest:
-				groupOutbound.URLTestOptions.Outbounds = append(groupOutbound.URLTestOptions.Outbounds, extraTags...)
+				urltestOptions := common.PtrValueOrDefault(extraGroup.CustomURLTest)
+				groupOutbound.Options = &urltestOptions
+				urltestOptions.Outbounds = append(urltestOptions.Outbounds, extraTags...)
 			}
 			if extraGroup.Target == option.ExtraGroupTargetDefault {
 				defaultGroups = append(defaultGroups, groupOutbound)
@@ -191,16 +197,18 @@ func (t *Template) renderOutbounds(metadata M.Metadata, options *boxOption.Optio
 					tagPerSubscription = buffer.String()
 				}
 				groupOutboundPerSubscription := boxOption.Outbound{
-					Tag:             tagPerSubscription,
-					Type:            extraGroup.Type,
-					SelectorOptions: common.PtrValueOrDefault(extraGroup.CustomSelector),
-					URLTestOptions:  common.PtrValueOrDefault(extraGroup.CustomURLTest),
+					Tag:  tagPerSubscription,
+					Type: extraGroup.Type,
 				}
 				switch extraGroup.Type {
 				case C.TypeSelector:
-					groupOutboundPerSubscription.SelectorOptions.Outbounds = append(groupOutboundPerSubscription.SelectorOptions.Outbounds, subscriptionTags...)
+					selectorOptions := common.PtrValueOrDefault(extraGroup.CustomSelector)
+					groupOutboundPerSubscription.Options = &selectorOptions
+					selectorOptions.Outbounds = append(selectorOptions.Outbounds, subscriptionTags...)
 				case C.TypeURLTest:
-					groupOutboundPerSubscription.URLTestOptions.Outbounds = append(groupOutboundPerSubscription.URLTestOptions.Outbounds, subscriptionTags...)
+					urltestOptions := common.PtrValueOrDefault(extraGroup.CustomURLTest)
+					groupOutboundPerSubscription.Options = &urltestOptions
+					urltestOptions.Outbounds = append(urltestOptions.Outbounds, subscriptionTags...)
 				}
 				subscriptionGroups[it.Name] = append(subscriptionGroups[it.Name], groupOutboundPerSubscription)
 			}
@@ -238,11 +246,11 @@ func groupJoin(outbounds []boxOption.Outbound, groupTag string, appendFront bool
 	}
 	groupOutbound := outbounds[groupIndex]
 	var outboundPtr *[]string
-	switch groupOutbound.Type {
-	case C.TypeSelector:
-		outboundPtr = &groupOutbound.SelectorOptions.Outbounds
-	case C.TypeURLTest:
-		outboundPtr = &groupOutbound.URLTestOptions.Outbounds
+	switch outboundOptions := groupOutbound.Options.(type) {
+	case *boxOption.SelectorOutboundOptions:
+		outboundPtr = &outboundOptions.Outbounds
+	case *boxOption.URLTestOutboundOptions:
+		outboundPtr = &outboundOptions.Outbounds
 	default:
 		panic(F.ToString("unexpected group type: ", groupOutbound.Type))
 	}

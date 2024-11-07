@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"context"
 	"strings"
 
 	C "github.com/sagernet/sing-box/constant"
@@ -16,7 +17,7 @@ import (
 	"github.com/Dreamacro/clash/constant"
 )
 
-func ParseClashSubscription(content string) ([]option.Outbound, error) {
+func ParseClashSubscription(_ context.Context, content string) ([]option.Outbound, error) {
 	config, err := config.UnmarshalRawConfig([]byte(content))
 	if err != nil {
 		return nil, E.Cause(err, "parse clash config")
@@ -38,7 +39,7 @@ func ParseClashSubscription(content string) ([]option.Outbound, error) {
 				return nil, err
 			}
 			outbound.Type = C.TypeShadowsocks
-			outbound.ShadowsocksOptions = option.ShadowsocksOutboundOptions{
+			outbound.Options = &option.ShadowsocksOutboundOptions{
 				ServerOptions: option.ServerOptions{
 					Server:     ssOption.Server,
 					ServerPort: uint16(ssOption.Port),
@@ -56,7 +57,7 @@ func ParseClashSubscription(content string) ([]option.Outbound, error) {
 				return nil, err
 			}
 			outbound.Type = C.TypeShadowsocksR
-			outbound.ShadowsocksROptions = option.ShadowsocksROutboundOptions{
+			outbound.Options = &option.ShadowsocksROutboundOptions{
 				ServerOptions: option.ServerOptions{
 					Server:     ssrOption.Server,
 					ServerPort: uint16(ssrOption.Port),
@@ -76,7 +77,7 @@ func ParseClashSubscription(content string) ([]option.Outbound, error) {
 				return nil, err
 			}
 			outbound.Type = C.TypeTrojan
-			outbound.TrojanOptions = option.TrojanOutboundOptions{
+			outbound.Options = &option.TrojanOutboundOptions{
 				ServerOptions: option.ServerOptions{
 					Server:     trojanOption.Server,
 					ServerPort: uint16(trojanOption.Port),
@@ -100,7 +101,7 @@ func ParseClashSubscription(content string) ([]option.Outbound, error) {
 				return nil, err
 			}
 			outbound.Type = C.TypeVMess
-			outbound.VMessOptions = option.VMessOutboundOptions{
+			outbound.Options = &option.VMessOutboundOptions{
 				ServerOptions: option.ServerOptions{
 					Server:     vmessOption.Server,
 					ServerPort: uint16(vmessOption.Port),
@@ -131,7 +132,7 @@ func ParseClashSubscription(content string) ([]option.Outbound, error) {
 			}
 
 			outbound.Type = C.TypeSOCKS
-			outbound.SocksOptions = option.SocksOutboundOptions{
+			outbound.Options = &option.SOCKSOutboundOptions{
 				ServerOptions: option.ServerOptions{
 					Server:     socks5Option.Server,
 					ServerPort: uint16(socks5Option.Port),
@@ -152,7 +153,7 @@ func ParseClashSubscription(content string) ([]option.Outbound, error) {
 			}
 
 			outbound.Type = C.TypeHTTP
-			outbound.HTTPOptions = option.HTTPOutboundOptions{
+			outbound.Options = &option.HTTPOutboundOptions{
 				ServerOptions: option.ServerOptions{
 					Server:     httpOption.Server,
 					ServerPort: uint16(httpOption.Port),

@@ -1,6 +1,8 @@
 package template
 
 import (
+	"context"
+
 	M "github.com/sagernet/serenity/common/metadata"
 	"github.com/sagernet/serenity/common/semver"
 	"github.com/sagernet/sing-box/option"
@@ -8,7 +10,7 @@ import (
 	"github.com/sagernet/sing/common/json/badjson"
 )
 
-func (t *Template) renderExperimental(metadata M.Metadata, options *option.Options, profileName string) error {
+func (t *Template) renderExperimental(ctx context.Context, metadata M.Metadata, options *option.Options, profileName string) error {
 	if t.DisableCacheFile && t.DisableClashMode && t.CustomClashAPI == nil {
 		return nil
 	}
@@ -37,7 +39,7 @@ func (t *Template) renderExperimental(metadata M.Metadata, options *option.Optio
 	}
 
 	if t.CustomClashAPI != nil {
-		newClashOptions, err := badjson.MergeFromDestination(options.Experimental.ClashAPI, t.CustomClashAPI.Message, true)
+		newClashOptions, err := badjson.MergeFromDestination(ctx, options.Experimental.ClashAPI, t.CustomClashAPI.Message, true)
 		if err != nil {
 			return err
 		}

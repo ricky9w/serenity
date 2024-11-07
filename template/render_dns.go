@@ -110,8 +110,15 @@ func (t *Template) renderDNS(metadata M.Metadata, options *option.Options) error
 		{
 			Type: C.RuleTypeDefault,
 			DefaultOptions: option.DefaultDNSRule{
-				Outbound: []string{"any"},
-				Server:   DNSLocalTag,
+				RawDefaultDNSRule: option.RawDefaultDNSRule{
+					Outbound: []string{"any"},
+				},
+				DNSRuleAction: option.DNSRuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.DNSRouteActionOptions{
+						Server: DNSLocalTag,
+					},
+				},
 			},
 		},
 	}
@@ -132,14 +139,28 @@ func (t *Template) renderDNS(metadata M.Metadata, options *option.Options) error
 		options.DNS.Rules = append(options.DNS.Rules, option.DNSRule{
 			Type: C.RuleTypeDefault,
 			DefaultOptions: option.DefaultDNSRule{
-				ClashMode: clashModeGlobal,
-				Server:    DNSDefaultTag,
+				RawDefaultDNSRule: option.RawDefaultDNSRule{
+					ClashMode: clashModeGlobal,
+				},
+				DNSRuleAction: option.DNSRuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.DNSRouteActionOptions{
+						Server: DNSDefaultTag,
+					},
+				},
 			},
 		}, option.DNSRule{
 			Type: C.RuleTypeDefault,
 			DefaultOptions: option.DefaultDNSRule{
-				ClashMode: clashModeDirect,
-				Server:    DNSLocalTag,
+				RawDefaultDNSRule: option.RawDefaultDNSRule{
+					ClashMode: clashModeDirect,
+				},
+				DNSRuleAction: option.DNSRuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.DNSRouteActionOptions{
+						Server: DNSLocalTag,
+					},
+				},
 			},
 		})
 	}
@@ -150,16 +171,30 @@ func (t *Template) renderDNS(metadata M.Metadata, options *option.Options) error
 				options.DNS.Rules = append(options.DNS.Rules, option.DNSRule{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultDNSRule{
-						Geosite: []string{"geolocation-cn"},
-						Server:  DNSLocalTag,
+						RawDefaultDNSRule: option.RawDefaultDNSRule{
+							Geosite: []string{"geolocation-cn"},
+						},
+						DNSRuleAction: option.DNSRuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.DNSRouteActionOptions{
+								Server: DNSLocalTag,
+							},
+						},
 					},
 				})
 			} else {
 				options.DNS.Rules = append(options.DNS.Rules, option.DNSRule{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultDNSRule{
-						RuleSet: []string{"geosite-geolocation-cn"},
-						Server:  DNSLocalTag,
+						RawDefaultDNSRule: option.RawDefaultDNSRule{
+							RuleSet: []string{"geosite-geolocation-cn"},
+						},
+						DNSRuleAction: option.DNSRuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.DNSRouteActionOptions{
+								Server: DNSLocalTag,
+							},
+						},
 					},
 				})
 			}
@@ -167,29 +202,58 @@ func (t *Template) renderDNS(metadata M.Metadata, options *option.Options) error
 				options.DNS.Rules = append(options.DNS.Rules, option.DNSRule{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultDNSRule{
-						ClashMode: clashModeRule,
-						Server:    DNSDefaultTag,
+						RawDefaultDNSRule: option.RawDefaultDNSRule{
+							ClashMode: clashModeRule,
+						},
+						DNSRuleAction: option.DNSRuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.DNSRouteActionOptions{
+								Server: DNSDefaultTag,
+							},
+						},
 					},
 				}, option.DNSRule{
 					Type: C.RuleTypeLogical,
 					LogicalOptions: option.LogicalDNSRule{
-						Mode: C.LogicalTypeAnd,
-						Rules: []option.DNSRule{
-							{
-								Type: C.RuleTypeDefault,
-								DefaultOptions: option.DefaultDNSRule{
-									RuleSet: []string{"geosite-geolocation-!cn"},
-									Invert:  true,
+						RawLogicalDNSRule: option.RawLogicalDNSRule{
+							Mode: C.LogicalTypeAnd,
+							Rules: []option.DNSRule{
+								{
+									Type: C.RuleTypeDefault,
+									DefaultOptions: option.DefaultDNSRule{
+										RawDefaultDNSRule: option.RawDefaultDNSRule{
+											RuleSet: []string{"geosite-geolocation-!cn"},
+										},
+										DNSRuleAction: option.DNSRuleAction{
+											Action: C.RuleActionTypeRoute,
+											RouteOptions: option.DNSRouteActionOptions{
+												Server: DNSDefaultTag,
+											},
+										},
+									},
 								},
-							},
-							{
-								Type: C.RuleTypeDefault,
-								DefaultOptions: option.DefaultDNSRule{
-									RuleSet: []string{"geoip-cn"},
+								{
+									Type: C.RuleTypeDefault,
+									DefaultOptions: option.DefaultDNSRule{
+										RawDefaultDNSRule: option.RawDefaultDNSRule{
+											RuleSet: []string{"geoip-cn"},
+										},
+										DNSRuleAction: option.DNSRuleAction{
+											Action: C.RuleActionTypeRoute,
+											RouteOptions: option.DNSRouteActionOptions{
+												Server: DNSLocalTag,
+											},
+										},
+									},
 								},
 							},
 						},
-						Server: DNSLocalTag,
+						DNSRuleAction: option.DNSRuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.DNSRouteActionOptions{
+								Server: DNSLocalTag,
+							},
+						},
 					},
 				})
 			}
@@ -201,11 +265,18 @@ func (t *Template) renderDNS(metadata M.Metadata, options *option.Options) error
 		options.DNS.Rules = append(options.DNS.Rules, option.DNSRule{
 			Type: C.RuleTypeDefault,
 			DefaultOptions: option.DefaultDNSRule{
-				QueryType: []option.DNSQueryType{
-					option.DNSQueryType(mDNS.TypeA),
-					option.DNSQueryType(mDNS.TypeAAAA),
+				RawDefaultDNSRule: option.RawDefaultDNSRule{
+					QueryType: []option.DNSQueryType{
+						option.DNSQueryType(mDNS.TypeA),
+						option.DNSQueryType(mDNS.TypeAAAA),
+					},
 				},
-				Server: DNSFakeIPTag,
+				DNSRuleAction: option.DNSRuleAction{
+					Action: C.RuleActionTypeRoute,
+					RouteOptions: option.DNSRouteActionOptions{
+						Server: DNSFakeIPTag,
+					},
+				},
 			},
 		})
 	}
