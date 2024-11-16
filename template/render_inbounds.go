@@ -54,6 +54,7 @@ func (t *Template) renderInbounds(metadata M.Metadata, options *option.Options) 
 			tunOptions.StrictRoute = true
 		}
 		if disableRuleAction {
+			//nolint:staticcheck
 			tunOptions.InboundOptions = option.InboundOptions{
 				SniffEnabled: !t.DisableSniff,
 			}
@@ -97,6 +98,7 @@ func (t *Template) renderInbounds(metadata M.Metadata, options *option.Options) 
 			SetSystemProxy: metadata.Platform == M.PlatformUnknown && disableTun && !t.DisableSystemProxy,
 		}
 		if disableRuleAction {
+			//nolint:staticcheck
 			mixedOptions.InboundOptions = option.InboundOptions{
 				SniffEnabled:   !t.DisableSniff,
 				DomainStrategy: domainStrategy,
