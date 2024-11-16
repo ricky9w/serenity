@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	box "github.com/sagernet/sing-box"
+	"github.com/sagernet/sing-box"
 	"github.com/sagernet/sing-box/include"
 	_ "github.com/sagernet/sing-box/include"
 	"github.com/sagernet/sing-box/log"

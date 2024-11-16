@@ -36,10 +36,10 @@ func (o *Options) UnmarshalJSONContext(ctx context.Context, content []byte) erro
 }
 
 type User struct {
-	Name           string                  `json:"name,omitempty"`
-	Password       string                  `json:"password,omitempty"`
-	Profile        option.Listable[string] `json:"profile,omitempty"`
-	DefaultProfile string                  `json:"default_profile,omitempty"`
+	Name           string                     `json:"name,omitempty"`
+	Password       string                     `json:"password,omitempty"`
+	Profile        badoption.Listable[string] `json:"profile,omitempty"`
+	DefaultProfile string                     `json:"default_profile,omitempty"`
 }
 
 const (
@@ -47,24 +47,24 @@ const (
 )
 
 type Subscription struct {
-	Name             string                                  `json:"name,omitempty"`
-	URL              string                                  `json:"url,omitempty"`
-	UserAgent        string                                  `json:"user_agent,omitempty"`
-	UpdateInterval   option.Duration                         `json:"update_interval,omitempty"`
-	Process          option.Listable[OutboundProcessOptions] `json:"process,omitempty"`
-	DeDuplication    bool                                    `json:"deduplication,omitempty"`
-	GenerateSelector bool                                    `json:"generate_selector,omitempty"`
-	GenerateURLTest  bool                                    `json:"generate_urltest,omitempty"`
-	URLTestTagSuffix string                                  `json:"urltest_suffix,omitempty"`
-	CustomSelector   *option.SelectorOutboundOptions         `json:"custom_selector,omitempty"`
-	CustomURLTest    *option.URLTestOutboundOptions          `json:"custom_urltest,omitempty"`
+	Name             string                                     `json:"name,omitempty"`
+	URL              string                                     `json:"url,omitempty"`
+	UserAgent        string                                     `json:"user_agent,omitempty"`
+	UpdateInterval   badoption.Duration                         `json:"update_interval,omitempty"`
+	Process          badoption.Listable[OutboundProcessOptions] `json:"process,omitempty"`
+	DeDuplication    bool                                       `json:"deduplication,omitempty"`
+	GenerateSelector bool                                       `json:"generate_selector,omitempty"`
+	GenerateURLTest  bool                                       `json:"generate_urltest,omitempty"`
+	URLTestTagSuffix string                                     `json:"urltest_suffix,omitempty"`
+	CustomSelector   *option.SelectorOutboundOptions            `json:"custom_selector,omitempty"`
+	CustomURLTest    *option.URLTestOutboundOptions             `json:"custom_urltest,omitempty"`
 }
 
 type OutboundProcessOptions struct {
-	Filter           option.Listable[string]           `json:"filter,omitempty"`
-	Exclude          option.Listable[string]           `json:"exclude,omitempty"`
-	FilterType       option.Listable[string]           `json:"filter_type,omitempty"`
-	ExcludeType      option.Listable[string]           `json:"exclude_type,omitempty"`
+	Filter           badoption.Listable[string]        `json:"filter,omitempty"`
+	Exclude          badoption.Listable[string]        `json:"exclude,omitempty"`
+	FilterType       badoption.Listable[string]        `json:"filter_type,omitempty"`
+	ExcludeType      badoption.Listable[string]        `json:"exclude_type,omitempty"`
 	Invert           bool                              `json:"invert,omitempty"`
 	Remove           bool                              `json:"remove,omitempty"`
 	Rename           *badjson.TypedMap[string, string] `json:"rename,omitempty"`
@@ -77,6 +77,6 @@ type Profile struct {
 	Template             string                            `json:"template,omitempty"`
 	TemplateForPlatform  *badjson.TypedMap[string, string] `json:"template_for_platform,omitempty"`
 	TemplateForUserAgent *badjson.TypedMap[string, string] `json:"template_for_user_agent,omitempty"`
-	Outbound             option.Listable[string]           `json:"outbound,omitempty"`
-	Subscription         option.Listable[string]           `json:"subscription,omitempty"`
+	Outbound             badoption.Listable[string]        `json:"outbound,omitempty"`
+	Subscription         badoption.Listable[string]        `json:"subscription,omitempty"`
 }

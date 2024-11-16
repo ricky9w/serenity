@@ -138,9 +138,16 @@ func (p *Profile) Render(metadata metadata.Metadata) (*boxOption.Options, error)
 	outbounds := common.Filter(p.manager.outbounds, func(it []boxOption.Outbound) bool {
 		return common.Contains(p.Outbound, it[0].Tag)
 	})
-	subscriptions := common.Filter(p.manager.subscription.Subscriptions(), func(it *subscription.Subscription) bool {
-		return common.Contains(p.Subscription, it.Name)
-	})
+	var subscriptions []*subscription.Subscription
+	for _, subscriptionName := range p.Subscription {
+		subscription := common.Find(p.manager.subscription.Subscriptions(), func(it *subscription.Subscription) bool {
+			return it.Name == subscriptionName
+		})
+		if subscription == nil {
+			return nil, E.New("render profile[", p.Name, "]: subscription not found: ", subscriptionName)
+		}
+		subscriptions = append(subscriptions, subscription)
+	}
 	options, err := selectedTemplate.Render(p.manager.ctx, metadata, p.Name, outbounds, subscriptions)
 	if err != nil {
 		return nil, err

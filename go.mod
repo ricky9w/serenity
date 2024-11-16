@@ -11,13 +11,13 @@ require (
 	github.com/go-chi/render v1.0.3
 	github.com/miekg/dns v1.1.62
 	github.com/sagernet/bbolt v0.0.0-20231014093535-ea5cb2fe9f0a
-	github.com/sagernet/sing v0.5.1-0.20241107131656-6e1285b5d82f
-	github.com/sagernet/sing-box v1.10.2-0.20241107134520-fead0e42505f
-	github.com/sagernet/sing-dns v0.3.1-0.20241105104342-1914f319ddab
+	github.com/sagernet/sing v0.6.0-alpha.16
+	github.com/sagernet/sing-box v1.11.0-alpha.17
+	github.com/sagernet/sing-dns v0.4.0-alpha.2
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/mod v0.21.0
-	golang.org/x/net v0.30.0
+	golang.org/x/net v0.31.0
 )
 
 require (
@@ -68,12 +68,12 @@ require (
 	github.com/sagernet/nftables v0.3.0-beta.4 // indirect
 	github.com/sagernet/quic-go v0.48.1-beta.1 // indirect
 	github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691 // indirect
-	github.com/sagernet/sing-mux v0.2.1-0.20241020175909-fe6153f7a9ec // indirect
-	github.com/sagernet/sing-quic v0.3.0-rc.2 // indirect
+	github.com/sagernet/sing-mux v0.3.0-alpha.1 // indirect
+	github.com/sagernet/sing-quic v0.4.0-alpha.3 // indirect
 	github.com/sagernet/sing-shadowsocks v0.2.7 // indirect
 	github.com/sagernet/sing-shadowsocks2 v0.2.0 // indirect
 	github.com/sagernet/sing-shadowtls v0.1.4 // indirect
-	github.com/sagernet/sing-tun v0.4.0-rc.5.0.20241107062822-5a91eb99c90f // indirect
+	github.com/sagernet/sing-tun v0.6.0-alpha.8 // indirect
 	github.com/sagernet/sing-vmess v0.1.12 // indirect
 	github.com/sagernet/smux v0.0.0-20231208180855-7041f6ea79e7 // indirect
 	github.com/sagernet/utls v1.6.7 // indirect
@@ -91,11 +91,11 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
-	golang.org/x/crypto v0.28.0 // indirect
+	golang.org/x/crypto v0.29.0 // indirect
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56 // indirect
-	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/sync v0.9.0 // indirect
+	golang.org/x/sys v0.27.0 // indirect
+	golang.org/x/text v0.20.0 // indirect
 	golang.org/x/time v0.7.0 // indirect
 	golang.org/x/tools v0.24.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240227224415-6ceb2ff114de // indirect

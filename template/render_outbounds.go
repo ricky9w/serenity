@@ -6,6 +6,7 @@ import (
 	"text/template"
 
 	M "github.com/sagernet/serenity/common/metadata"
+	"github.com/sagernet/serenity/common/semver"
 	"github.com/sagernet/serenity/option"
 	"github.com/sagernet/serenity/subscription"
 	C "github.com/sagernet/sing-box/constant"
@@ -16,6 +17,7 @@ import (
 )
 
 func (t *Template) renderOutbounds(metadata M.Metadata, options *boxOption.Options, outbounds [][]boxOption.Outbound, subscriptions []*subscription.Subscription) error {
+	disableRuleAction := t.DisableRuleAction || (metadata.Version != nil && metadata.Version.LessThan(semver.ParseVersion("1.11.0-alpha.7")))
 	defaultTag := t.DefaultTag
 	if defaultTag == "" {
 		defaultTag = DefaultDefaultTag
@@ -36,20 +38,24 @@ func (t *Template) renderOutbounds(metadata M.Metadata, options *boxOption.Optio
 			Options: common.Ptr(common.PtrValueOrDefault(t.CustomDirect)),
 		},
 		{
-			Tag:     blockTag,
-			Type:    C.TypeBlock,
-			Options: &boxOption.StubOptions{},
-		},
-		{
-			Tag:     DNSTag,
-			Type:    C.TypeDNS,
-			Options: &boxOption.StubOptions{},
-		},
-		{
 			Tag:     defaultTag,
 			Type:    C.TypeSelector,
 			Options: common.Ptr(common.PtrValueOrDefault(t.CustomSelector)),
 		},
+	}
+	if disableRuleAction {
+		options.Outbounds = append(options.Outbounds,
+			boxOption.Outbound{
+				Tag:     blockTag,
+				Type:    C.TypeBlock,
+				Options: &boxOption.StubOptions{},
+			},
+			boxOption.Outbound{
+				Tag:     DNSTag,
+				Type:    C.TypeDNS,
+				Options: &boxOption.StubOptions{},
+			},
+		)
 	}
 	urlTestTag := t.URLTestTag
 	if urlTestTag == "" {

@@ -8,6 +8,7 @@ import (
 	"github.com/sagernet/sing-box/option"
 	E "github.com/sagernet/sing/common/exceptions"
 	"github.com/sagernet/sing/common/format"
+	"github.com/sagernet/sing/common/json/badoption"
 	N "github.com/sagernet/sing/common/network"
 
 	"github.com/Dreamacro/clash/adapter"
@@ -224,10 +225,10 @@ func clashPluginOptions(plugin string, opts map[string]any) string {
 func clashTransport(network string, httpOpts clash_outbound.HTTPOptions, h2Opts clash_outbound.HTTP2Options, grpcOpts clash_outbound.GrpcOptions, wsOpts clash_outbound.WSOptions) *option.V2RayTransportOptions {
 	switch network {
 	case "http":
-		var headers map[string]option.Listable[string]
+		var headers map[string]badoption.Listable[string]
 		for key, values := range httpOpts.Headers {
 			if headers == nil {
-				headers = make(map[string]option.Listable[string])
+				headers = make(map[string]badoption.Listable[string])
 			}
 			headers[key] = values
 		}
@@ -255,10 +256,10 @@ func clashTransport(network string, httpOpts clash_outbound.HTTPOptions, h2Opts 
 			},
 		}
 	case "ws":
-		var headers map[string]option.Listable[string]
+		var headers map[string]badoption.Listable[string]
 		for key, value := range wsOpts.Headers {
 			if headers == nil {
-				headers = make(map[string]option.Listable[string])
+				headers = make(map[string]badoption.Listable[string])
 			}
 			headers[key] = []string{value}
 		}

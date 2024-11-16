@@ -19,8 +19,15 @@ func TestFilter1100(t *testing.T) {
 				{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultDNSRule{
-						RuleSet: []string{"test"},
-						Server:  "test",
+						RawDefaultDNSRule: option.RawDefaultDNSRule{
+							RuleSet: []string{"test"},
+						},
+						DNSRuleAction: option.DNSRuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.DNSRouteActionOptions{
+								Server: "test",
+							},
+						},
 					},
 				},
 			},
@@ -30,8 +37,15 @@ func TestFilter1100(t *testing.T) {
 				{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultRule{
-						RuleSet:  []string{"test"},
-						Outbound: "test",
+						RawDefaultRule: option.RawDefaultRule{
+							Domain: []string{"example.com"},
+						},
+						RuleAction: option.RuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.RouteActionOptions{
+								Outbound: "test",
+							},
+						},
 					},
 				},
 			},
@@ -61,8 +75,15 @@ func TestFilter1100(t *testing.T) {
 				{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultDNSRule{
-						Domain: []string{"example.com"},
-						Server: "test",
+						RawDefaultDNSRule: option.RawDefaultDNSRule{
+							Domain: []string{"example.com"},
+						},
+						DNSRuleAction: option.DNSRuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.DNSRouteActionOptions{
+								Server: "test",
+							},
+						},
 					},
 				},
 			},
@@ -72,8 +93,15 @@ func TestFilter1100(t *testing.T) {
 				{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultRule{
-						Domain:   []string{"example.com"},
-						Outbound: "test",
+						RawDefaultRule: option.RawDefaultRule{
+							Domain: []string{"example.com"},
+						},
+						RuleAction: option.RuleAction{
+							Action: C.RuleActionTypeRoute,
+							RouteOptions: option.RouteActionOptions{
+								Outbound: "test",
+							},
+						},
 					},
 				},
 			},

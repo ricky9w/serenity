@@ -9,6 +9,7 @@ import (
 	E "github.com/sagernet/sing/common/exceptions"
 	"github.com/sagernet/sing/common/json"
 	"github.com/sagernet/sing/common/json/badjson"
+	"github.com/sagernet/sing/common/json/badoption"
 )
 
 type _Template struct {
@@ -22,7 +23,8 @@ type _Template struct {
 	DomainStrategy       option.DomainStrategy `json:"domain_strategy,omitempty"`
 	DomainStrategyLocal  option.DomainStrategy `json:"domain_strategy_local,omitempty"`
 	DisableTrafficBypass bool                  `json:"disable_traffic_bypass,omitempty"`
-	DisableRuleSet       bool                  `json:"disable_rule_set,omitempty"`
+	DisableSniff         bool                  `json:"disable_sniff,omitempty"`
+	DisableRuleAction    bool                  `json:"disable_rule_action,omitempty"`
 	RemoteResolve        bool                  `json:"remote_resolve,omitempty"`
 
 	// DNS
@@ -53,14 +55,12 @@ type _Template struct {
 	CustomURLTest  *option.URLTestOutboundOptions  `json:"custom_urltest,omitempty"`
 
 	// Route
-	DisableDefaultRules bool                   `json:"disable_default_rules,omitempty"`
-	PreRules            []option.Rule          `json:"pre_rules,omitempty"`
-	CustomRules         []option.Rule          `json:"custom_rules,omitempty"`
-	EnableJSDelivr      bool                   `json:"enable_jsdelivr,omitempty"`
-	CustomGeoIP         *option.GeoIPOptions   `json:"custom_geoip,omitempty"`
-	CustomGeosite       *option.GeositeOptions `json:"custom_geosite,omitempty"`
-	CustomRuleSet       []RuleSet              `json:"custom_rule_set,omitempty"`
-	PostRuleSet         []RuleSet              `json:"post_rule_set,omitempty"`
+	DisableDefaultRules bool          `json:"disable_default_rules,omitempty"`
+	PreRules            []option.Rule `json:"pre_rules,omitempty"`
+	CustomRules         []option.Rule `json:"custom_rules,omitempty"`
+	EnableJSDelivr      bool          `json:"enable_jsdelivr,omitempty"`
+	CustomRuleSet       []RuleSet     `json:"custom_rule_set,omitempty"`
+	PostRuleSet         []RuleSet     `json:"post_rule_set,omitempty"`
 
 	//  Experimental
 	DisableCacheFile          bool `json:"disable_cache_file,omitempty"`
@@ -122,10 +122,10 @@ func (r *RuleSet) UnmarshalJSON(content []byte) error {
 }
 
 type GitHubRuleSetOptions struct {
-	Repository string                  `json:"repository,omitempty"`
-	Path       string                  `json:"path,omitempty"`
-	Prefix     string                  `json:"prefix,omitempty"`
-	RuleSet    option.Listable[string] `json:"rule_set,omitempty"`
+	Repository string                     `json:"repository,omitempty"`
+	Path       string                     `json:"path,omitempty"`
+	Prefix     string                     `json:"prefix,omitempty"`
+	RuleSet    badoption.Listable[string] `json:"rule_set,omitempty"`
 }
 
 func (t Template) DisableIPv6() bool {
@@ -137,8 +137,8 @@ type ExtraGroup struct {
 	Target             ExtraGroupTarget                `json:"target,omitempty"`
 	TagPerSubscription string                          `json:"tag_per_subscription,omitempty"`
 	Type               string                          `json:"type,omitempty"`
-	Filter             option.Listable[string]         `json:"filter,omitempty"`
-	Exclude            option.Listable[string]         `json:"exclude,omitempty"`
+	Filter             badoption.Listable[string]      `json:"filter,omitempty"`
+	Exclude            badoption.Listable[string]      `json:"exclude,omitempty"`
 	CustomSelector     *option.SelectorOutboundOptions `json:"custom_selector,omitempty"`
 	CustomURLTest      *option.URLTestOutboundOptions  `json:"custom_urltest,omitempty"`
 }

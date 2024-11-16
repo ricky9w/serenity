@@ -11,7 +11,8 @@
   "domain_strategy": "",
   "domain_strategy_local": "",
   "disable_traffic_bypass": false,
-  "disable_rule_set": false,
+  "disable_sniff": false,
+  "disable_rule_action": false,
   "remote_resolve": false,
   
   // DNS
@@ -113,9 +114,13 @@ Local sing-box domain strategy.
 
 `prefer_ipv4` is used by default.
 
-#### disable_rule_set
+#### disable_sniff
 
-Use `geoip` and `geosite` for traffic bypassing instead of rule sets.
+Don`t generate protocol sniffing options.
+
+#### disable_rule_action
+
+Don`t generate rule action options.
 
 #### disable_traffic_bypass
 
