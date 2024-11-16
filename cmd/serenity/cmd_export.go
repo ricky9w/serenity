@@ -104,7 +104,7 @@ func export(profileName string) error {
 	if err != nil {
 		return err
 	}
-	encoder := json.NewEncoder(os.Stdout)
+	encoder := json.NewEncoderContext(globalCtx, os.Stdout)
 	encoder.SetIndent("", "  ")
 	err = encoder.Encode(boxOptions)
 	if err != nil {
