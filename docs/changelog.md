@@ -2,6 +2,10 @@
 icon: material/alert-decagram
 ---
 
+#### 1.1.0-alpha.1
+
+* Add support for rule actions
+
 #### 1.0.0-beta.19
 
 * Fixes and improvements
