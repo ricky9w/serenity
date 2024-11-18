@@ -2,8 +2,11 @@
 icon: material/alert-decagram
 ---
 
-#### 1.1.0-alpha.2
+#### 1.1.0-alpha.3
 
+* If `extra_groups.include/exclude` is not set,
+  subscription groups instead of subscription outbounds will be used as group outbounds
+* Add `template.custom_fakeip`
 * Fixes and improvements
 
 #### 1.1.0-alpha.1
@@ -20,7 +23,7 @@ icon: material/alert-decagram
 
 #### 1.0.0-beta.16
 
-* Add `export <profile>` command to export configuration without running the server 
+* Add `export <profile>` command to export configuration without running the server
 * Add `template.extra_groups.exclude_outbounds`
 * Add `template.extra_groups.<per_subscription/tag_per_subscription>`
 
