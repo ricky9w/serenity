@@ -94,11 +94,15 @@ func (t *Template) renderDNS(metadata M.Metadata, options *option.Options) error
 		})
 	}
 	if t.EnableFakeIP {
-		options.DNS.FakeIP = &option.DNSFakeIPOptions{
-			Enabled:    true,
-			Inet4Range: common.Ptr(netip.MustParsePrefix("198.18.0.0/15")),
+		options.DNS.FakeIP = t.CustomFakeIP
+		if options.DNS.FakeIP == nil {
+			options.DNS.FakeIP = &option.DNSFakeIPOptions{}
 		}
-		if !t.DisableIPv6() {
+		options.DNS.FakeIP.Enabled = true
+		if !options.DNS.FakeIP.Inet4Range.IsValid() {
+			options.DNS.FakeIP.Inet4Range = common.Ptr(netip.MustParsePrefix("198.18.0.0/15"))
+		}
+		if !t.DisableIPv6() && !options.DNS.FakeIP.Inet6Range.IsValid() {
 			options.DNS.FakeIP.Inet6Range = common.Ptr(netip.MustParsePrefix("fc00::/18"))
 		}
 		options.DNS.Servers = append(options.DNS.Servers, option.DNSServerOptions{

@@ -35,6 +35,7 @@ type _Template struct {
 	DisableDNSLeak bool                      `json:"disable_dns_leak,omitempty"`
 	PreDNSRules    []option.DNSRule          `json:"pre_dns_rules,omitempty"`
 	CustomDNSRules []option.DNSRule          `json:"custom_dns_rules,omitempty"`
+	CustomFakeIP   *option.DNSFakeIPOptions  `json:"custom_fakeip,omitempty"`
 
 	// Inbound
 	Inbounds           []option.Inbound                              `json:"inbounds,omitempty"`

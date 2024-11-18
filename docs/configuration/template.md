@@ -22,6 +22,7 @@
   "enable_fakeip": false,
   "pre_dns_rules": [],
   "custom_dns_rules": [],
+  "custom_fakeip": {},
   
   // Inbound
 
@@ -157,6 +158,10 @@ Will be applied before traffic bypassing rules.
 List of [DNS Rule](https://sing-box.sagernet.org/configuration/dns/rule/).
 
 No default traffic bypassing DNS rules will be generated if not empty.
+
+#### custom_fakeip
+
+Custom [FakeIP](https://sing-box.sagernet.org/configuration/dns/fakeip/) template.
 
 #### inbounds
 
