@@ -172,7 +172,39 @@ func (t *Template) renderRoute(metadata M.Metadata, options *option.Options) err
 				Type: C.RuleTypeDefault,
 				DefaultOptions: option.DefaultRule{
 					RawDefaultRule: option.RawDefaultRule{
-						RuleSet: []string{"geoip-cn", "geosite-geolocation-cn"},
+						RuleSet: []string{"geosite-geolocation-cn"},
+					},
+					RuleAction: option.RuleAction{
+						Action: C.RuleActionTypeRoute,
+						RouteOptions: option.RouteActionOptions{
+							Outbound: directTag,
+						},
+					},
+				},
+			}, option.Rule{
+				Type: C.RuleTypeLogical,
+				LogicalOptions: option.LogicalRule{
+					RawLogicalRule: option.RawLogicalRule{
+						Mode: C.LogicalTypeAnd,
+						Rules: []option.Rule{
+							{
+								Type: C.RuleTypeDefault,
+								DefaultOptions: option.DefaultRule{
+									RawDefaultRule: option.RawDefaultRule{
+										RuleSet: []string{"geoip-cn"},
+									},
+								},
+							},
+							{
+								Type: C.RuleTypeDefault,
+								DefaultOptions: option.DefaultRule{
+									RawDefaultRule: option.RawDefaultRule{
+										RuleSet: []string{"geosite-geolocation-!cn"},
+										Invert:  true,
+									},
+								},
+							},
+						},
 					},
 					RuleAction: option.RuleAction{
 						Action: C.RuleActionTypeRoute,

@@ -171,7 +171,6 @@ func (t *Template) renderDNS(metadata M.Metadata, options *option.Options) error
 	options.DNS.Rules = append(options.DNS.Rules, t.PreDNSRules...)
 	if len(t.CustomDNSRules) == 0 {
 		if !t.DisableTrafficBypass {
-
 			options.DNS.Rules = append(options.DNS.Rules, option.DNSRule{
 				Type: C.RuleTypeDefault,
 				DefaultOptions: option.DefaultDNSRule{
@@ -210,7 +209,7 @@ func (t *Template) renderDNS(metadata M.Metadata, options *option.Options) error
 									Type: C.RuleTypeDefault,
 									DefaultOptions: option.DefaultDNSRule{
 										RawDefaultDNSRule: option.RawDefaultDNSRule{
-											RuleSet: []string{"geosite-geolocation-!cn"},
+											RuleSet: []string{"geoip-cn"},
 										},
 									},
 								},
@@ -218,7 +217,8 @@ func (t *Template) renderDNS(metadata M.Metadata, options *option.Options) error
 									Type: C.RuleTypeDefault,
 									DefaultOptions: option.DefaultDNSRule{
 										RawDefaultDNSRule: option.RawDefaultDNSRule{
-											RuleSet: []string{"geoip-cn"},
+											RuleSet: []string{"geosite-geolocation-!cn"},
+											Invert:  true,
 										},
 									},
 								},
